@@ -1,4 +1,4 @@
-// script.js
+// script.js (Improved Version)
 document.addEventListener('DOMContentLoaded', () => {
     const artForm = document.getElementById('artForm');
     const resultsSection = document.getElementById('results');
@@ -40,9 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }),
             });
 
+            // If the response is not OK, handle it as a potential server error
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to generate image from the server.');
+                // Try to get text from the response, which might be the HTML error page
+                const errorText = await response.text(); 
+                // We throw a custom error with this text
+                throw new Error(`Server error (Status: ${response.status}): ${errorText}`);
             }
 
             const data = await response.json();
@@ -56,8 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
             gallery.appendChild(imgPanel);
 
         } catch (error) {
-            console.error(error);
-            gallery.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+            console.error(error); // Log the full error to the browser console for debugging
+            // Display a user-friendly error message. Check if it's a timeout error.
+            let userMessage = `An error occurred: ${error.message}`;
+            if (error.message.includes("504") || error.message.includes("timeout")) {
+                userMessage = "The AI is taking too long to respond (server timeout). Please try again or use fewer inference steps.";
+            }
+            gallery.innerHTML = `<p style="color:red; font-weight:bold;">${userMessage}</p>`;
         } finally {
             generateBtn.disabled = false;
             generateBtn.textContent = 'Generate Art';
@@ -66,4 +74,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     artForm.addEventListener('submit', generateImage);
 });
-              
