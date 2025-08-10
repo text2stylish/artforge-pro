@@ -1,4 +1,4 @@
-// /api/generate-image.js (Final Version)
+// /api/generate-image.js (Final Corrected Version)
 
 import Replicate from "replicate";
 
