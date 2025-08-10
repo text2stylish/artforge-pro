@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ArtForge Pro - AI Art Generator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="header-content">
+    <h1 class="neon-text">ArtForge Pro</h1>
+    <nav>
+      <a href="index.html" class="active">Generator</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="glass-panel">
+  <form id="artForm">
+    <label for="prompt">Your Prompt (What you want to see)</label>
+    <textarea id="prompt" name="prompt" placeholder="A majestic lion king on a cliff, cinematic lighting" required></textarea>
+
+    <label for="negative_prompt">Negative Prompt (What you DON'T want to see)</label>
+    <textarea id="negative_prompt" name="negative_prompt" placeholder="ugly, deformed, blurry, bad anatomy"></textarea>
+    
+    <div class="slider-group">
+      <div>
+        <label for="guidance_scale">Guidance Scale (CFG): <span id="guidance_scale_value">7.5</span></label>
+        <input type="range" id="guidance_scale" name="guidance_scale" min="1" max="20" value="7.5" step="0.5" />
+      </div>
+      <div>
+        <label for="num_inference_steps">Inference Steps: <span id="num_inference_steps_value">50</span></label>
+        <input type="range" id="num_inference_steps" name="num_inference_steps" min="10" max="100" value="50" step="1" />
+      </div>
+    </div>
+    
+    <button type="submit" id="generateBtn">Generate Art</button>
+  </form>
+</section>
+
+<section id="results" class="glass-panel" style="display:none;">
+  <h2 class="neon-text">Generated Art</h2>
+  <div id="gallery"></div>
+</section>
+</main>
+
+<footer>
+  <p>&copy; 2025 ArtForge Pro. All rights reserved.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+      </html>
+  
