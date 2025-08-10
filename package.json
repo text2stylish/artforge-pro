@@ -1,0 +1,12 @@
+{
+  "name": "artforge-pro-final",
+  "version": "1.0.0",
+  "description": "AI Art Generator with Replicate API",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo \"No start script specified\""
+  },
+  "dependencies": {
+    "replicate": "^0.29.1"
+  }
+}
