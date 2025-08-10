@@ -1,4 +1,4 @@
-// /api/generate-image.js (Updated with a faster model)
+// /api/generate-image.js (Final Version)
 
 import Replicate from "replicate";
 
@@ -14,14 +14,16 @@ export default async function handler(req, res) {
   try {
     const { prompt, negative_prompt, guidance_scale, num_inference_steps } = req.body;
 
-    // NEW: Using a faster "Turbo" model designed for speed
-    const model = "stability-ai/sd-turbo:a3615176b5354922f51f5436814316124578f14a601662a48841b539a243463c";
+    // CORRECTED: Using the official and stable SDXL model from Stability AI.
+    // This is one of the most reliable models on the platform.
+    const model = "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b";
     
-    // Turbo models use fewer steps and different guidance settings
+    // This model uses all the advanced parameters from your user interface.
     const input = {
       prompt: prompt,
-      // NOTE: This turbo model does not use negative_prompt, steps, or guidance.
-      // We still get them from the UI but don't pass them to this specific model.
+      negative_prompt: negative_prompt,
+      num_inference_steps: parseInt(num_inference_steps, 10),
+      guidance_scale: parseFloat(guidance_scale),
     };
 
     const output = await replicate.run(model, { input });
@@ -29,7 +31,7 @@ export default async function handler(req, res) {
     if (output && output.length > 0) {
       res.status(200).json({ imageUrl: output[0] });
     } else {
-      throw new Error("Failed to get image from Replicate.");
+      throw new Error("The AI did not return an image. Please try again.");
     }
 
   } catch (error) {
