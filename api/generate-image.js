@@ -1,6 +1,5 @@
-// /api/generate-image.js
+// /api/generate-image.js (Updated with a faster model)
 
-// Using the official Replicate Node.js client for convenience
 import Replicate from "replicate";
 
 export default async function handler(req, res) {
@@ -8,30 +7,25 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Only POST requests are allowed' });
   }
 
-  // Use your new, secret API key from environment variables
-  // The user will set this in their hosting provider (e.g., Vercel)
   const replicate = new Replicate({
     auth: process.env.REPLICATE_API_TOKEN,
   });
 
   try {
-    const { prompt, negative_prompt, num_inference_steps, guidance_scale } = req.body;
+    const { prompt, negative_prompt, guidance_scale, num_inference_steps } = req.body;
 
-    // The model we will use from Replicate's library
-    const model = "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b";
+    // NEW: Using a faster "Turbo" model designed for speed
+    const model = "stability-ai/sd-turbo:a3615176b5354922f51f5436814316124578f14a601662a48841b539a243463c";
     
-    // The input parameters for the model
+    // Turbo models use fewer steps and different guidance settings
     const input = {
       prompt: prompt,
-      negative_prompt: negative_prompt,
-      num_inference_steps: parseInt(num_inference_steps, 10),
-      guidance_scale: parseFloat(guidance_scale),
+      // NOTE: This turbo model does not use negative_prompt, steps, or guidance.
+      // We still get them from the UI but don't pass them to this specific model.
     };
 
-    // Run the model and wait for the output
     const output = await replicate.run(model, { input });
 
-    // Replicate returns an array of image URLs, we'll take the first one
     if (output && output.length > 0) {
       res.status(200).json({ imageUrl: output[0] });
     } else {
